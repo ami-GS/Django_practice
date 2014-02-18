@@ -1,0 +1,21 @@
+from list improt *
+from detail import *
+
+
+
+
+class ListRelated(DetailView, ListView):
+    related_name = None
+
+    def get_list_queryset(self):
+        obj = self.get_detail_object()
+        return getattr(obj, self.related_name).all()
+
+class DetailListCreateView(ListRelated, CreateView):
+    success_url = "#"
+    fk_attr = None
+
+    def modelform_valid(self, modelform):
+        self.modelform_object = modelform.save(commit=False)
+        setattr(self.modelForm_object, self.fk_attr, self.get_detail_object())
+        return HttpResponseRedirect(self.get_success_url())

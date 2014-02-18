@@ -1,0 +1,14 @@
+class ContextMixin(object):
+    """
+    A default context mixin that passes the keyword arguments received by
+    get_context_data as the template context.
+    """
+    def add_context(self):
+        """Convenience method; may be overridden to add context by returning a dictionary."""
+        return {}
+
+    def get_context_data(self, **kwargs):
+        if 'view' not in kwargs:
+            kwargs['view'] = self
+        kwargs.update(self.add_context())
+        return kwargs
